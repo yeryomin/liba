@@ -12,6 +12,13 @@
 int timer = TIMER;
 int counter = 0;
 
+void thread42()
+{
+	/* just do nothing */
+	while (1)
+		sleep(5);
+}
+
 void reset_timer( int sig )
 {
 	/* temporarily ingnore interrupts */
@@ -28,8 +35,11 @@ int main( int argc, char **argv )
 {
 	int pid = daemonize( PIDPATH, NAME );
 
-	/* daemon stuff */
+	/* register sighup handler for daemon */
 	a_signal( SIGHUP, reset_timer );
+	/* start another thread, name is 16 chars including null terminator */
+	thread( "thread42", &thread42, NULL );
+	/* daemon stuff */
 	syslog( LOG_INFO, "Working hard..." );
 	while ( timer > 0 ) {
 		sleep(1);

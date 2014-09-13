@@ -28,6 +28,6 @@ extern char *a_daemon_pidfile;
 
 void a_signal( int sig, void (*handler)( int sig ) );
 int daemonize( const char *path, const char *name );
-
+void thread( const char *name, void *cb, void *args );
 
 #endif /* _LIBA_H_ */

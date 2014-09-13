@@ -4,6 +4,7 @@ AR     = $(CROSS_COMPILE)ar
 RANLIB = $(CROSS_COMPILE)ranlib
 STRIP  = $(CROSS_COMPILE)strip -s
 
-CFLAGS += -Wall -fPIC -O2 -g3
+CFLAGS  += -Wall -fPIC -O2 -g3
+LDFLAGS += -lpthread
 
 include main.mk

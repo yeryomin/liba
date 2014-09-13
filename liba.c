@@ -22,6 +22,8 @@
 #include <syslog.h>
 #include <sys/stat.h>
 #include <signal.h>
+#include <pthread.h>
+#include <sys/prctl.h>
 
 #include "liba.h"
 
@@ -163,4 +165,19 @@ int daemonize( const char *pidpath, const char *name )
 	syslog( LOG_INFO, "Started %s with PID %i", a_daemon_name, pid );
 
 	return pid;
+}
+
+void thread( const char *name, void *cb, void *args )
+{
+	pthread_t thr;
+	pthread_attr_t thr_attr;
+
+	pthread_attr_init( &thr_attr );
+	pthread_attr_setdetachstate( &thr_attr, PTHREAD_CREATE_DETACHED );
+
+	if ( name )
+		prctl( PR_SET_NAME, name, 0, 0, 0 );
+
+	pthread_create( &thr, &thr_attr, cb, args );
+	pthread_attr_destroy( &thr_attr );
 }

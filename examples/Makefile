@@ -7,7 +7,7 @@ LIBASRC  = ../
 LIBALIB  = -L$(LIBASRC) -static -la
 LIBAINC  = -I$(LIBASRC)
 INCLUDES = $(LIBAINC)
-LDFLAGS  = $(LIBALIB)
+LDFLAGS  = $(LIBALIB) -lpthread
 
 default: all
 all: $(BINARIES)
