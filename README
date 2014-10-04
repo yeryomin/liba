@@ -1,0 +1,17 @@
+liba
+====
+
+Wrappers and extenders for standard functions.
+
+
+Usage
+-----
+
+Just make and copy where needed, include liba.h an link with -la.
+
+
+Documentation
+-------------
+
+Only the code for now.
+Look at examples.
