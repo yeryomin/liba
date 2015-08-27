@@ -167,17 +167,25 @@ int daemonize( const char *pidpath, const char *name )
 	return pid;
 }
 
-void thread( const char *name, void *cb, void *args )
+int thread( const char *name, void *cb, void *args )
 {
+	int err;
 	pthread_t thr;
 	pthread_attr_t thr_attr;
 
-	pthread_attr_init( &thr_attr );
-	pthread_attr_setdetachstate( &thr_attr, PTHREAD_CREATE_DETACHED );
+	err = pthread_attr_init( &thr_attr );
+	if ( err )
+		return err;
+
+	err = pthread_attr_setdetachstate( &thr_attr, PTHREAD_CREATE_DETACHED );
+	if ( err )
+		goto exit;
 
 	if ( name )
 		prctl( PR_SET_NAME, name, 0, 0, 0 );
 
-	pthread_create( &thr, &thr_attr, cb, args );
+	err = pthread_create( &thr, &thr_attr, cb, args );
+exit:
 	pthread_attr_destroy( &thr_attr );
+	return err;
 }
