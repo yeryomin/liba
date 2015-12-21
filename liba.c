@@ -98,14 +98,14 @@ static int a_daemon( const char *pidfile, int nochdir )
 	return pid;
 }
 
-static void a_daemon_death_handler( int sig )
+void a_daemon_death_handler( int sig )
 {
 	signal( sig, SIG_IGN );
 	syslog( LOG_INFO, "Cleaning up and dying..." );
 	if ( unlink( a_daemon_pidfile ) < 0 )
 		syslog( LOG_WARNING, "Cannot delete %s: %m", a_daemon_pidfile );
 
-	exit(EXIT_FAILURE);
+	exit(EXIT_SUCCESS);
 }
 
 void a_signal( int sig, void (*handler)(  ) )
@@ -149,6 +149,18 @@ int daemonize( const char *pidpath, const char *name )
 
 	/* register TERM signal handler */
 	a_signal( SIGTERM, a_daemon_death_handler );
+	/* register crash signal handlers */
+	a_signal( SIGQUIT, a_daemon_death_handler );
+	a_signal( SIGILL, a_daemon_death_handler );
+	a_signal( SIGABRT, a_daemon_death_handler );
+	a_signal( SIGFPE, a_daemon_death_handler );
+	a_signal( SIGSEGV, a_daemon_death_handler );
+	a_signal( SIGBUS, a_daemon_death_handler );
+	a_signal( SIGSYS, a_daemon_death_handler );
+	a_signal( SIGTRAP, a_daemon_death_handler );
+	a_signal( SIGSEGV, a_daemon_death_handler );
+	a_signal( SIGXCPU, a_daemon_death_handler );
+	a_signal( SIGXFSZ, a_daemon_death_handler );
 
 	/* try to daemonize */
 	pid = a_daemon( a_daemon_pidfile, A_DAEMON_NOCHDIR );
