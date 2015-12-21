@@ -158,7 +158,6 @@ int daemonize( const char *pidpath, const char *name )
 	a_signal( SIGBUS, a_daemon_death_handler );
 	a_signal( SIGSYS, a_daemon_death_handler );
 	a_signal( SIGTRAP, a_daemon_death_handler );
-	a_signal( SIGSEGV, a_daemon_death_handler );
 	a_signal( SIGXCPU, a_daemon_death_handler );
 	a_signal( SIGXFSZ, a_daemon_death_handler );
 
